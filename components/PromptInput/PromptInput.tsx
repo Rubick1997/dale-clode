@@ -1,9 +1,17 @@
 "use client";
 
+import { fetchSuggestion } from "@/lib";
 import { useState } from "react";
+import useSWR from "swr";
 
 function PromptInput() {
   const [input, setInput] = useState("");
+  const {
+    data: suggestion,
+    isLoading,
+    mutate,
+    isValidating,
+  } = useSWR("/api/suggestion", fetchSuggestion, { revalidateOnFocus: false });
 
   return (
     <div className="m-10">
