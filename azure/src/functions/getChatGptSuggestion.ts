@@ -4,7 +4,7 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import openai from "../../lib/openai";
+import { openai } from "../../lib";
 
 export async function getChatGptSuggestion(
   request: HttpRequest,
@@ -19,7 +19,7 @@ export async function getChatGptSuggestion(
         {
           role: "user",
           content:
-            "Write a cool prompt for DALL E looking like Lord of the rings and a lot of hobbits",
+            'Write a cool prompt for DALL-E to generate an image from. For example, "something magical and beautiful."',
         },
       ],
       max_tokens: 100,

@@ -1,13 +1,14 @@
-export async function GET(request: Request) {
+import axios from "axios";
+
+export async function GET() {
   //connect to microsoft azure
-  const response = await fetch(
+
+  const response = await axios.get(
     "http://localhost:7071/api/getChatGptSuggestion",
-    {
-      cache: "no-store",
-    }
+    { responseType: "text" }
   );
 
-  const textData = await response.text();
+  const textData = await response.data;
 
   return new Response(JSON.stringify(textData.trim()), { status: 200 });
 }

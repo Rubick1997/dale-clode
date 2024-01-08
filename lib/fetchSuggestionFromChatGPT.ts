@@ -1,4 +1,6 @@
+import axios from "axios";
+
 const fetchSuggestionFromChatGPT = async () =>
-  fetch("/api/suggestion", { cache: "no-store" }).then((res) => res.json());
+  axios.get("/api/suggestion").then((res) => res.data);
 
 export default fetchSuggestionFromChatGPT;
