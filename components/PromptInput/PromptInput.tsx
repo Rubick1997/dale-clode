@@ -96,7 +96,7 @@ function PromptInput() {
         <button
           type="button"
           className="p-4 bg-white text-violet-400 transition-colors duration-200 font-bold disabled:text-gray-300 disabled:cursor-not-allowed md:rounded-bl-none disabled:bg-gray-400"
-          onClick={mutate}
+          onClick={() => mutate()}
         >
           New Suggestion
         </button>
