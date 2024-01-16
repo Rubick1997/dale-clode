@@ -4,6 +4,7 @@ import { fetchImages, fetchSuggestion } from "@/lib";
 import axios from "axios";
 import { FormEvent, useState } from "react";
 import useSWR from "swr";
+import toast from "react-hot-toast";
 
 function PromptInput() {
   const [input, setInput] = useState("");
@@ -12,7 +13,9 @@ function PromptInput() {
     isLoading,
     mutate,
     isValidating,
-  } = useSWR("/api/suggestion", fetchSuggestion, { revalidateOnFocus: false });
+  } = useSWR<string>("/api/suggestion", fetchSuggestion, {
+    revalidateOnFocus: false,
+  });
 
   const { mutate: updateImages } = useSWR("images", fetchImages, {
     revalidateOnFocus: false,
@@ -26,13 +29,28 @@ function PromptInput() {
 
     // what will be sent to the API
     const p = useSuggestion ? suggestion : inputPrompt;
-    await axios
-      .post("/api/generateImage", JSON.stringify({ prompt: p }), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(() => updateImages());
+
+    const notificationPromptShort = p?.slice(0, 20);
+
+    const notification = toast.loading(
+      `DALL-E is thinking of ${notificationPromptShort}...`
+    );
+
+    try {
+      await axios
+        .post("/api/generateImage", JSON.stringify({ prompt: p }), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          toast.success(`Your AI Art is ready!`, { id: notification });
+          updateImages();
+        });
+    } catch (error) {
+      const { message } = error as { message: string };
+      toast.error(message as string);
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
