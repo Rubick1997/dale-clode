@@ -30,7 +30,7 @@ app.http("getImages", {
     const sasToken = await generateSASToken();
     for await (const blob of containerClient.listBlobsFlat()) {
       const imageUrl = `${blob.name}?${sasToken}`;
-      const url = `https://${accountName}.blob.core.windows.net/${containerName}/${imageUrl}}`;
+      const url = `https://${accountName}.blob.core.windows.net/${containerName}/${imageUrl}`;
       imageUrls.push({ url, name: blob.name });
     }
     const sortedImageUrls = imageUrls.sort((a, b) => {

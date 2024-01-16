@@ -5,7 +5,12 @@ export async function GET() {
 
   const response = await axios.get(
     "http://localhost:7071/api/getChatGptSuggestion",
-    { responseType: "text" }
+    {
+      responseType: "text",
+      params: {
+        _: new Date().getTime(),
+      },
+    }
   );
 
   const textData = await response.data;

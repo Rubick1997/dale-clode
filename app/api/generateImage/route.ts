@@ -11,6 +11,10 @@ export async function POST(request: Request) {
     {
       headers: { "Content-Type": "application/json" },
       responseType: "text",
+      // to prevent caching
+      params: {
+        _: new Date().getTime(),
+      },
     }
   );
   const textData = await response.data;

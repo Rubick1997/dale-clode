@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchSuggestion } from "@/lib";
+import { fetchImages, fetchSuggestion } from "@/lib";
 import axios from "axios";
 import { FormEvent, useState } from "react";
 import useSWR from "swr";
@@ -14,6 +14,10 @@ function PromptInput() {
     isValidating,
   } = useSWR("/api/suggestion", fetchSuggestion, { revalidateOnFocus: false });
 
+  const { mutate: updateImages } = useSWR("images", fetchImages, {
+    revalidateOnFocus: false,
+  });
+
   const loading = isLoading || isValidating;
 
   const submitPrompt = async (useSuggestion?: boolean) => {
@@ -22,17 +26,13 @@ function PromptInput() {
 
     // what will be sent to the API
     const p = useSuggestion ? suggestion : inputPrompt;
-    const res = await axios.post(
-      "/api/generateImage",
-      JSON.stringify({ prompt: p }),
-      {
+    await axios
+      .post("/api/generateImage", JSON.stringify({ prompt: p }), {
         headers: {
           "Content-Type": "application/json",
         },
-      }
-    );
-
-    const { data } = res;
+      })
+      .then(() => updateImages());
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
