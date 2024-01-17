@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   const prompt = res.prompt;
 
   const response = await axios.post(
-    "http://localhost:7071/api/generateImage",
+    "https://ai-image-generator-app-rustam.azurewebsites.net/api/generateimage",
     JSON.stringify({ prompt }),
     {
       headers: { "Content-Type": "application/json" },

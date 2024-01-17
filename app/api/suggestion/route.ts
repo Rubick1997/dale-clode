@@ -4,7 +4,7 @@ export async function GET() {
   //connect to microsoft azure
 
   const response = await axios.get(
-    "http://localhost:7071/api/getChatGptSuggestion",
+    "https://ai-image-generator-app-rustam.azurewebsites.net/api/getchatgptsuggestion",
     {
       responseType: "text",
       params: {
