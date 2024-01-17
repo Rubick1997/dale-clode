@@ -1,18 +1,18 @@
-import axios from "axios";
-import { blob } from "stream/consumers";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  const response = await axios.get(
-    "https://ai-image-generator-app-rustam.azurewebsites.net/api/getimages",
+  const response = await fetch(
+    `https://ai-image-generator-app-rustam.azurewebsites.net/api/getimages?timestamp=${new Date().getTime()}`,
     {
-      responseType: "blob",
-      params: {
-        _: new Date().getTime(),
+      headers: { "Content-Type": "application/json" },
+      // to prevent caching
+
+      next: {
+        revalidate: 0,
       },
     }
   );
-  const textData = await response.data;
-  const data = JSON.parse(textData);
+  const textData = await response.blob();
 
-  return new Response(JSON.stringify(data), { status: 200 });
+  return new Response(textData, { status: 200 });
 }

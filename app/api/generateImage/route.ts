@@ -1,23 +1,24 @@
-import axios from "axios";
 import { NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const res = (await request.json()) as { prompt: string };
   const prompt = res.prompt;
 
-  const response = await axios.post(
-    "https://ai-image-generator-app-rustam.azurewebsites.net/api/generateimage",
-    JSON.stringify({ prompt }),
+  const response = await fetch(
+    `https://ai-image-generator-app-rustam.azurewebsites.net/api/generateimage?timestamp=${new Date().getTime()}`,
     {
+      method: "POST",
+      body: JSON.stringify({ prompt }),
       headers: { "Content-Type": "application/json" },
-      responseType: "text",
       // to prevent caching
-      params: {
-        _: new Date().getTime(),
+
+      next: {
+        revalidate: 0,
       },
     }
   );
-  const textData = await response.data;
+  const textData = await response.text();
 
   return NextResponse.json(textData);
 }
