@@ -18,7 +18,7 @@ app.http("generateImage", {
       n: 1,
       size: "1024x1024",
     });
-    const image_url = response.data[0].url;
+    const image_url = response.data[0].url as string;
     const res = await axios.get(image_url, { responseType: "arraybuffer" });
     const arrayBuffer = res.data;
     const sasToken = await generateSASToken();
@@ -38,8 +38,9 @@ app.http("generateImage", {
       console.log("upload success");
       return { status: 200, body: "Image was uploaded successfully" };
     } catch (error) {
-      console.error("Error uploading blob", error.message);
-      return { status: 500, body: error.message };
+      const { message } = error as Error;
+      console.error("Error uploading blob", message);
+      return { status: 500, body: message };
     }
   },
 });
